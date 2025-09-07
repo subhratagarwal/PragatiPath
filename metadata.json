@@ -1,0 +1,9 @@
+{
+  "name": "PragatiPath",
+  "description": "A smart, citizen-centric platform for reporting and resolving civic issues. It uses AI for prioritization, features gamification to encourage participation, and provides transparent tracking for all reported problems.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}

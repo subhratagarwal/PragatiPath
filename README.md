@@ -1,4 +1,4 @@
-# Smart Civic Issue Reporting & Resolution System
+# PragatiPath: AI-Powered Civic Issue Reporting Platform
 
 ![PragatiPath Banner](https://img.shields.io/badge/PragatiPath-Community%20Powered%20Solutions-green)
 ![React](https://img.shields.io/badge/React-18.2-blue)

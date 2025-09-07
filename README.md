@@ -1,20 +1,3 @@
-Perfect 👍 thanks for sharing both versions.
-
-Here’s what I’ll do for you:
-
-* Keep the **style/structure** of the second README (the one you just shared).
-* Adapt it to match your **real project setup** (from the first README you uploaded earlier), i.e.:
-
-  * ✅ **No backend (Node.js, MongoDB, Express, etc.)** → remove those parts.
-  * ✅ Keep **React + Vite + TypeScript + Tailwind + Framer Motion + Recharts + Google Gemini API**.
-  * ✅ Simplify **installation and run instructions** (just `npm install` + `npm run dev`).
-  * ✅ Keep architecture, features, AI integration, gamification, etc. but only from **frontend perspective**.
-
----
-
-# 📝 Updated README (Frontend-Only, Your Tech Stack)
-
-````markdown
 # PragatiPath: AI-Powered Civic Issue Reporting Platform
 
 ![PragatiPath Banner](https://img.shields.io/badge/PragatiPath-Community%20Powered%20Solutions-green)

@@ -302,7 +302,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🆘 Support
 
-- 📧 Email: support@civicfix.org
+- 📧 Email: support@PragatiPath.org
 - 🐛 [Issue Tracker](https://github.com/your-username/civic-issue-platform/issues)
 - 📖 [Documentation](docs/README.md)
 - 💬 [Community Forum](https://github.com/your-username/civic-issue-platform/discussions)

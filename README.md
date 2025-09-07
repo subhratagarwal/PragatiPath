@@ -1,6 +1,6 @@
 # Smart Civic Issue Reporting & Resolution System
 
-![PragatiPath Banner](https://img.shields.io/badge/CivicFix-Community%20Powered%20Solutions-green)
+![PragatiPath Banner](https://img.shields.io/badge/PragatiPath-Community%20Powered%20Solutions-green)
 ![React](https://img.shields.io/badge/React-18.2-blue)
 ![Node.js](https://img.shields.io/badge/Node.js-Express-brightgreen)
 ![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-green)

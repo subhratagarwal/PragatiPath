@@ -8,28 +8,59 @@
   }
   
   body {
-    @apply antialiased text-gray-800 bg-white;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    @apply antialiased text-gray-800 bg-white font-inter; /* Added font-inter */
+  }
+
+  /* Custom font setup */
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('/fonts/Inter-VariableFont.woff2') format('woff2'); /* Assuming you'll add Inter font variable file */
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
   }
 }
 
 @layer components {
+  /* Buttons */
   .btn-primary {
-    @apply px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75 transition-colors duration-200;
+    @apply px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold rounded-lg shadow-md hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75 transition-all duration-300 ease-in-out;
   }
   
   .btn-secondary {
-    @apply px-6 py-3 bg-gray-200 text-gray-800 font-semibold rounded-lg shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-75 transition-colors duration-200;
+    @apply px-6 py-3 bg-gray-100 text-gray-800 font-semibold rounded-lg shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-75 transition-colors duration-200;
+  }
+
+  .btn-outline {
+    @apply px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-75 transition-colors duration-200;
   }
   
-  .card {
-    @apply bg-white rounded-xl shadow-lg p-6;
+  /* Cards */
+  .card-base {
+    @apply bg-white rounded-xl shadow-lg border border-gray-100;
   }
-  
+
+  /* Form Elements */
   .input-field {
-    @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors duration-200;
+    @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 placeholder-gray-400 text-gray-800;
+  }
+
+  /* Typography */
+  .text-gradient-primary {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600;
+  }
+
+  /* Layout */
+  .section-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12;
   }
   
+  .min-h-screen-with-nav-footer {
+    min-height: calc(100vh - theme('height.16') - theme('height.24')); /* Adjust based on Navbar and Footer height */
+  }
+
+  /* Line Clamp (already good) */
   .line-clamp-3 {
     display: -webkit-box;
     -webkit-line-clamp: 3;
@@ -38,11 +69,11 @@
   }
 }
 
-/* Custom animations */
+/* Custom animations (from Framer Motion, but defined as keyframes for potential non-JS usage or reference) */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -51,10 +82,10 @@
 }
 
 .animate-fade-in-up {
-  animation: fadeInUp 0.6s ease-out;
+  animation: fadeInUp 0.6s ease-out forwards;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar (already good) */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -64,14 +95,14 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-400 rounded-full;
+  @apply bg-gray-300 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-500;
+  @apply bg-gray-400;
 }
 
-/* Loading spinner */
+/* Loading spinner (already good, will use Framer Motion for a better one) */
 .loading-spinner {
   border: 2px solid #f3f3f3;
   border-top: 2px solid #10B981;
@@ -86,7 +117,7 @@
   100% { transform: rotate(360deg); }
 }
 
-/* Map container styles */
+/* Map container styles (will be handled by MapView.jsx) */
 .map-container {
   width: 100%;
   height: 100%;
@@ -99,15 +130,16 @@
   }
 }
 
-/* Focus styles for accessibility */
+/* Focus styles for accessibility (enhanced) */
 button:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
-select:focus-visible {
-  @apply outline-none ring-2 ring-green-500 ring-offset-2;
+select:focus-visible,
+a:focus-visible {
+  @apply outline-none ring-2 ring-indigo-500 ring-offset-2 ring-offset-white;
 }
 
-/* Reduced motion for accessibility */
+/* Reduced motion for accessibility (already good) */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -119,7 +151,7 @@ select:focus-visible {
   }
 }
 
-/* High contrast mode support */
+/* High contrast mode support (already good) */
 @media (prefers-contrast: high) {
   .btn-primary {
     @apply border-2 border-black;
@@ -130,17 +162,17 @@ select:focus-visible {
   }
 }
 
-/* Dark mode support (optional) */
-@media (prefers-color-scheme: dark) {
+/* Dark mode support (optional, not implementing full dark mode now but keeping structure) */
+/* @media (prefers-color-scheme: dark) {
   .dark-mode {
     @apply bg-gray-900 text-white;
   }
   
-  .dark-mode .card {
-    @apply bg-gray-800 text-white;
+  .dark-mode .card-base {
+    @apply bg-gray-800 text-white border-gray-700;
   }
   
   .dark-mode .input-field {
-    @apply bg-gray-700 border-gray-600 text-white;
+    @apply bg-gray-700 border-gray-600 text-white placeholder-gray-300;
   }
-}
+} */

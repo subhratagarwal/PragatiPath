@@ -1,3 +1,4 @@
+
 import { User, Issue, IssueStatus, IssueCategory, Badge, Comment, Department } from './types';
 import { ShieldCheckIcon, FireIcon, StarIcon, MapPinIcon } from './components/icons';
 
@@ -8,6 +9,15 @@ export const categoryColors: Record<IssueCategory, string> = {
   [IssueCategory.Graffiti]: 'bg-purple-500 border-purple-300',
   [IssueCategory.PublicTransport]: 'bg-blue-500 border-blue-300',
   [IssueCategory.Other]: 'bg-gray-500 border-gray-300',
+};
+
+export const categoryToDepartmentMap: Record<IssueCategory, Department | undefined> = {
+  [IssueCategory.Pothole]: Department.PublicWorks,
+  [IssueCategory.Streetlight]: Department.PublicWorks,
+  [IssueCategory.Waste]: Department.Sanitation,
+  [IssueCategory.Graffiti]: Department.CodeEnforcement,
+  [IssueCategory.PublicTransport]: Department.Transportation,
+  [IssueCategory.Other]: undefined, // Requires manual assignment
 };
 
 export const badges: Badge[] = [
@@ -36,17 +46,16 @@ export const mockIssues: Issue[] = [
     title: 'Massive Pothole on Main St',
     description: 'A large and dangerous pothole near the intersection of Main St and 1st Ave. It has already damaged a car. The pothole is approximately 3 feet wide and several inches deep, making it a significant hazard for all vehicles, especially at night or during rain when it is less visible.',
     category: IssueCategory.Pothole,
-    status: IssueStatus.InProgress,
+    status: IssueStatus.Acknowledged,
     imageUrl: 'https://picsum.photos/seed/pothole1/800/600',
     address: '123 Main St, Anytown',
     reportedBy: 'Alice Johnson',
-    reportedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+    reportedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
     upvotes: 128,
     priority: 'Critical',
     timeline: [
-      { status: IssueStatus.Reported, date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), notes: 'Initial report with photo submitted.' },
-      { status: IssueStatus.Acknowledged, date: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000), notes: 'Team assigned.' },
-      { status: IssueStatus.InProgress, date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), notes: 'Repair work started.' },
+      { status: IssueStatus.Reported, date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), notes: 'Initial report with photo submitted.' },
+      { status: IssueStatus.Acknowledged, date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), notes: 'Team assigned. Scheduled for repair within 48 hours.' },
     ],
     comments: mockComments,
     assignedDepartment: Department.PublicWorks,
@@ -77,57 +86,19 @@ export const mockIssues: Issue[] = [
     title: 'Overflowing bins at City Market',
     description: 'The public waste bins at the city market are overflowing, attracting pests and creating a mess. This has been a recurring problem every weekend.',
     category: IssueCategory.Waste,
-    status: IssueStatus.Acknowledged,
+    status: IssueStatus.Reported,
     imageUrl: 'https://picsum.photos/seed/waste1/800/600',
     address: '789 Market St, Anytown',
     reportedBy: 'Charlie Brown',
-    reportedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+    reportedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
     upvotes: 42,
     priority: 'Medium',
     timeline: [
-      { status: IssueStatus.Reported, date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), notes: 'Initial report submitted.' },
-      { status: IssueStatus.Acknowledged, date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), notes: 'Sanitation crew scheduled for pickup.' },
+      { status: IssueStatus.Reported, date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), notes: 'Initial report submitted.' },
     ],
     comments: [
         { id: 'c3', author: 'Alice Johnson', avatarUrl: 'https://picsum.photos/seed/alice/100', text: "Yes! It smells terrible. Hope this gets cleaned up soon.", timestamp: new Date(Date.now() - 12 * 60 * 60 * 1000) },
     ],
     assignedDepartment: Department.Sanitation,
-  },
-  {
-    id: 'i4',
-    title: 'Graffiti on Park Wall',
-    description: 'Large graffiti tag on the main wall of Central Park playground.',
-    category: IssueCategory.Graffiti,
-    status: IssueStatus.Reported,
-    imageUrl: 'https://picsum.photos/seed/graffiti1/800/600',
-    address: '101 Park Plaza, Anytown',
-    reportedBy: 'Diana Prince',
-    reportedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-    upvotes: 15,
-    priority: 'Low',
-    timeline: [
-      { status: IssueStatus.Reported, date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), notes: 'Initial report.' },
-    ],
-    comments: [],
-    assignedDepartment: Department.ParksAndRec,
-  },
-  {
-    id: 'i5',
-    title: 'Bus Stop Shelter Damaged',
-    description: 'The glass panel at the bus stop on Elm St is shattered.',
-    category: IssueCategory.PublicTransport,
-    status: IssueStatus.Rejected,
-    imageUrl: 'https://picsum.photos/seed/busstop1/800/600',
-    address: '321 Elm St, Anytown',
-    reportedBy: 'Ethan Hunt',
-    reportedAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000),
-    upvotes: 22,
-    priority: 'Medium',
-    timeline: [
-      { status: IssueStatus.Reported, date: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000), notes: 'Report filed.' },
-      { status: IssueStatus.Rejected, date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), notes: 'Duplicate report. Issue already being tracked under #i6.' },
-    ],
-    comments: [],
-    assignedDepartment: Department.Transportation,
   },
 ];

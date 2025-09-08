@@ -11,7 +11,8 @@ const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 const MOCK_DESCRIPTION_RESPONSE = "A large, deep pothole is visible in the center of an asphalt road, posing a potential hazard to vehicles.";
 
-const MOCK_ANALYSIS_RESPONSE: { category: IssueCategory, priority: 'Low' | 'Medium' | 'High' | 'Critical', reasoning: string } = {
+const MOCK_ANALYSIS_RESPONSE: { isRelevant: boolean; category: IssueCategory; priority: 'Low' | 'Medium' | 'High' | 'Critical'; reasoning: string } = {
+    isRelevant: true,
     category: IssueCategory.Pothole,
     priority: "High",
     reasoning: "The image shows a large, deep pothole on a busy road, which poses a significant risk to vehicles and cyclists. The text confirms it has already caused damage."
@@ -63,7 +64,7 @@ export const generateDescriptionFromImage = async (imageFile: File): Promise<str
 };
 
 
-export const analyzeIssue = async (imageFile: File, description: string): Promise<{ category: IssueCategory, priority: 'Low' | 'Medium' | 'High' | 'Critical', reasoning: string }> => {
+export const analyzeIssue = async (imageFile: File, description: string): Promise<{ isRelevant: boolean; category: IssueCategory; priority: 'Low' | 'Medium' | 'High' | 'Critical'; reasoning: string }> => {
   if (process.env.API_KEY === "mock-api-key-for-local-dev") {
     console.warn("Using mock Gemini API response. Please provide a real API key.");
     await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate network delay
@@ -86,22 +87,26 @@ export const analyzeIssue = async (imageFile: File, description: string): Promis
         responseSchema: {
           type: Type.OBJECT,
           properties: {
+            isRelevant: {
+              type: Type.BOOLEAN,
+              description: "Does the image, along with the description, depict a genuine public civic issue (like potholes, graffiti, waste, etc.)? Set to false for irrelevant images like selfies, ID cards, or random photos."
+            },
             category: {
               type: Type.STRING,
-              description: "Categorize the issue into one of the following: 'Pothole', 'Broken Streetlight', 'Waste Management', 'Graffiti', 'Public Transport', 'Other'.",
+              description: "If relevant, categorize the issue into one of the following: 'Pothole', 'Broken Streetlight', 'Waste Management', 'Graffiti', 'Public Transport', 'Other'. If not relevant, this can be 'Other'.",
               enum: Object.values(IssueCategory),
             },
             priority: {
               type: Type.STRING,
-              description: "Assess the priority level as 'Low', 'Medium', 'High', or 'Critical' based on urgency and potential danger.",
+              description: "If relevant, assess the priority level as 'Low', 'Medium', 'High', or 'Critical'. If not relevant, this can be 'Low'.",
               enum: ['Low', 'Medium', 'High', 'Critical'],
             },
             reasoning: {
                 type: Type.STRING,
-                description: "Provide a brief one-sentence explanation for the chosen category and priority."
+                description: "Provide a brief one-sentence explanation for the chosen category and priority. If not relevant, explain why (e.g., 'Image is a selfie.')."
             }
           },
-          required: ["category", "priority", "reasoning"],
+          required: ["isRelevant", "category", "priority", "reasoning"],
         },
       },
     });

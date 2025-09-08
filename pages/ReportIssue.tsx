@@ -3,10 +3,11 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { generateDescriptionFromImage, analyzeIssue } from '../services/geminiService';
 import { getGpsCoordinates } from '../services/exifService';
-import { IssueCategory, Issue, IssueStatus } from '../types';
-import { PhotoIcon, MicrophoneIcon, MapPinIcon, SpinnerIcon, CameraIcon } from '../components/icons';
+import { IssueCategory, Issue, IssueStatus, Department } from '../types';
+import { PhotoIcon, MicrophoneIcon, MapPinIcon, SpinnerIcon, CameraIcon, BuildingOffice2Icon } from '../components/icons';
 import Loader from '../components/Loader';
 import { useAuth } from '../context/AuthContext';
+import { categoryToDepartmentMap } from '../constants';
 
 // Extend window type for SpeechRecognition
 interface IWindow extends Window {
@@ -253,6 +254,8 @@ const ReportIssue: React.FC<ReportIssueProps> = ({ onIssueSubmit }) => {
   const handleConfirmAndPost = () => {
     if (!analysisResult || !imagePreview) return;
     
+    const assignedDepartment = categoryToDepartmentMap[analysisResult.category];
+
     const newIssue: Issue = {
       id: `issue_${Date.now()}`,
       title: `${analysisResult.category} at ${address.split(',')[0]}`,
@@ -265,7 +268,8 @@ const ReportIssue: React.FC<ReportIssueProps> = ({ onIssueSubmit }) => {
       reportedAt: new Date(),
       upvotes: 0,
       priority: analysisResult.priority,
-      timeline: [{ status: IssueStatus.Reported, date: new Date() }],
+      timeline: [{ status: IssueStatus.Reported, date: new Date(), notes: 'Issue reported by citizen.' }],
+      assignedDepartment: assignedDepartment,
     };
     
     onIssueSubmit(newIssue);
@@ -389,20 +393,57 @@ const ReportIssue: React.FC<ReportIssueProps> = ({ onIssueSubmit }) => {
         <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-8 p-6 bg-green-500/10 border border-green-500 rounded-lg text-center"
+            className="mt-8 p-6 bg-green-500/10 border border-green-500 rounded-lg text-center space-y-4"
         >
-          <h2 className="text-2xl font-bold text-green-300 mb-4">Analysis Complete!</h2>
-          <p className="text-lg"><strong>Category:</strong> {analysisResult.category}</p>
-          <p className="text-lg"><strong>Priority:</strong> {analysisResult.priority}</p>
-          <p className="text-gray-300 mt-2"><em>"{analysisResult.reasoning}"</em></p>
-          <button 
-            onClick={handleConfirmAndPost}
-            className="mt-6 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-full transition-colors"
-          >
-            Confirm & Post Issue
-          </button>
+            <h2 className="text-2xl font-bold text-green-300 mb-2">Analysis Complete! Review & Post</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                <div className="bg-gray-900/50 p-3 rounded-lg">
+                    <p className="text-sm text-gray-400">Identified Category</p>
+                    <p className="text-lg font-semibold text-white">{analysisResult.category}</p>
+                </div>
+                <div className="bg-gray-900/50 p-3 rounded-lg">
+                    <p className="text-sm text-gray-400">Suggested Priority</p>
+                    <p className="text-lg font-semibold text-white">{analysisResult.priority}</p>
+                </div>
+                <div className="md:col-span-2 bg-gray-900/50 p-3 rounded-lg">
+                    <p className="text-sm text-gray-400">AI Reasoning</p>
+                    <p className="text-sm italic text-gray-300">"{analysisResult.reasoning}"</p>
+                </div>
+            </div>
+
+            <div className="mt-4 p-4 bg-gray-900/50 rounded-lg flex items-center justify-center space-x-3 border border-cyan-500/30">
+                <BuildingOffice2Icon className="w-6 h-6 text-cyan-400 flex-shrink-0" />
+                <div>
+                    <p className="text-sm text-gray-400">Smart Routing</p>
+                    <p className="font-semibold text-white">
+                    {categoryToDepartmentMap[analysisResult.category] 
+                        ? `Assigning to: ${categoryToDepartmentMap[analysisResult.category]}` 
+                        : 'Will be manually assigned by an admin'}
+                    </p>
+                </div>
+            </div>
+          
+            <div className="flex justify-center gap-4 pt-4">
+                <button
+                    onClick={handleConfirmAndPost}
+                    className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-full transition-colors"
+                >
+                    Confirm & Post Issue
+                </button>
+                <button
+                    onClick={() => {
+                        setAnalysisResult(null);
+                        setError(null);
+                    }}
+                    className="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-full transition-colors"
+                >
+                    Make Changes
+                </button>
+            </div>
         </motion.div>
       )}
+
     </motion.div>
   );
 };

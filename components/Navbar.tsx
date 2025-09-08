@@ -45,7 +45,7 @@ const Navbar: React.FC = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex items-center space-x-2 text-2xl font-bold text-white">
-            <MapPinIcon className="h-8 w-8 text-cyan-400" />
+           <img src="/logo.png" alt="PragatiPath Logo" className="h-12 w-12" />
             <span>PragatiPath</span>
           </Link>
 

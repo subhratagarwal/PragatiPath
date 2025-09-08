@@ -8,7 +8,7 @@ const Footer = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="flex items-center space-x-2 text-xl font-bold text-white mb-4 md:mb-0">
-            <MapPinIcon className="h-6 w-6 text-cyan-400" />
+            <img src="/logo.png" alt="PragatiPath Logo" className="h-12 w-12" />
             <span>PragatiPath</span>
           </div>
           <p className="text-gray-400 text-center md:text-left">
